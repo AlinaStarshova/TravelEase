@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TravelEase — элитные туры | 45 направлений</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif; background: #f5f7fc; padding: 24px; line-height: 1.5; color: #1a2c3e; }
+        body.dark-theme { background: #0f1724; color: #eef2ff; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        body.dark-theme ::-webkit-scrollbar-track { background: #1e293b; }
+        body.dark-theme ::-webkit-scrollbar-thumb { background: #475569; }
+        .app { max-width: 1400px; margin: 0 auto; }
+        header { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(4px); border-radius: 32px; padding: 16px 28px; margin-bottom: 28px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; border: 1px solid rgba(0, 102, 204, 0.12); }
+        body.dark-theme header { background: #1e2939; border-color: #2d3a4a; }
+        .logo { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #0066CC, #2b8cff); -webkit-background-clip: text; background-clip: text; color: transparent; cursor: pointer; }
+        body.dark-theme .logo { background: linear-gradient(135deg, #70a9ff, #a0c4ff); -webkit-background-clip: text; }
+        .user-area button { background: transparent; border: 1.5px solid #0066CC; padding: 10px 24px; border-radius: 40px; font-weight: 600; font-size: 14px; cursor: pointer; color: #0066CC; }
+        body.dark-theme .user-area button { border-color: #70a9ff; color: #70a9ff; }
+        .nav { display: flex; gap: 12px; }
+        .nav button { background: none; border: none; padding: 10px 22px; border-radius: 40px; font-weight: 500; font-size: 15px; cursor: pointer; color: #2c3e50; display: flex; align-items: center; gap: 8px; }
+        body.dark-theme .nav button { color: #cbd5e6; }
+        .nav button.active { background: #0066CC; color: white; box-shadow: 0 6px 14px rgba(0, 102, 204, 0.25); }
+        .nav button:hover:not(.active) { background: #eef2ff; }
+        body.dark-theme .nav button:hover:not(.active) { background: #2d3a4a; }
+        .content { background: white; border-radius: 36px; padding: 32px; box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08); border: 1px solid #eef2f8; }
+        body.dark-theme .content { background: #1a2533; border-color: #2a3747; }
+        .search-section { background: #f9fbfe; padding: 24px 28px; border-radius: 56px; margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; border: 1px solid #e2edf7; }
+        body.dark-theme .search-section { background: #1f2c3a; border-color: #2e3f4e; }
+        .search-group { flex: 1 1 180px; }
+        .search-group label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #5b7a9a; margin-bottom: 6px; }
+        .search-group input, .search-group select { width: 100%; padding: 12px 18px; border-radius: 60px; border: 1px solid #cbdde9; background: white; font-size: 15px; outline: none; }
+        .search-group input:focus, .search-group select:focus { border-color: #0066CC; box-shadow: 0 0 0 3px rgba(0,102,204,0.15); }
+        body.dark-theme .search-group input, body.dark-theme .search-group select { background: #253241; border-color: #405468; color: #eef2ff; }
+        .avatar-search-wrapper { display: flex; align-items: center; }
+        .avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #0066CC, #4098ff); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; cursor: pointer; border: 2px solid white; box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .filter-row { display: flex; gap: 28px; flex-wrap: wrap; margin: 20px 0 18px; padding: 14px 0; border-top: 1px solid #e2edf7; border-bottom: 1px solid #e2edf7; }
+        .filter-item { display: flex; align-items: center; gap: 14px; font-size: 14px; }
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 20px 0; }
+        .category-btn { background: #eef2ff; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; font-size: 14px; cursor: pointer; color: #1e3a5f; }
+        body.dark-theme .category-btn { background: #2d3a4a; color: #cbd5e6; }
+        .category-btn.active { background: #0066CC; color: white; box-shadow: 0 4px 12px rgba(0,102,204,0.3); }
+        input[type="range"] { width: 180px; height: 5px; -webkit-appearance: none; background: #cbdde9; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #0066CC; border-radius: 50%; cursor: pointer; }
+        body.dark-theme input[type="range"] { background: #405468; }
+        body.dark-theme input[type="range"]::-webkit-slider-thumb { background: #70a9ff; }
+        .tours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 28px; margin-top: 24px; }
+        .tour-card { background: #ffffff; border-radius: 28px; overflow: hidden; box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.08); transition: all 0.3s cubic-bezier(0.2, 0, 0, 1); cursor: pointer; border: 1px solid #eef2fa; }
+        body.dark-theme .tour-card { background: #202d3c; border-color: #2e4051; }
+        .tour-card:hover { transform: translateY(-6px); box-shadow: 0 28px 38px -14px rgba(0, 0, 0, 0.2); }
+        .tour-card img { width: 100%; height: 210px; object-fit: cover; background: #d9e2ef; }
+        .tour-info { padding: 20px 22px 26px; }
+        .tour-info h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .destination { color: #5b7a9a; font-size: 14px; margin-bottom: 12px; }
+        .price { font-size: 26px; font-weight: 800; color: #0066CC; }
+        body.dark-theme .price { color: #70a9ff; }
+        .rating { color: #f5b042; margin-top: 10px; font-weight: 500; }
+        .tour-category-badge { display: inline-block; background: #eef2ff; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; margin-top: 8px; color: #0066CC; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 3000; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 48px; padding: 32px; width: 560px; max-width: 92%; box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3); animation: fadeUp 0.25s ease; max-height: 85vh; overflow-y: auto; }
+        body.dark-theme .modal-content { background: #1e2a36; color: #fff; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .close-modal { float: right; font-size: 28px; cursor: pointer; transition: 0.2s; }
+        .destinations-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+        .dest-card { background: #f0f4fa; padding: 14px 12px; border-radius: 40px; text-align: center; cursor: pointer; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
+        .dest-card:hover { background: #0066CC; color: white; transform: scale(0.98); border-color: #fff; }
+        body.dark-theme .dest-card { background: #2f4052; color: #eef2ff; }
+        body.dark-theme .dest-card:hover { background: #70a9ff; color: #0f1724; }
+        .btn { background: #0066CC; color: white; border: none; padding: 14px 30px; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,102,204,0.3); }
+        .btn:hover { background: #004c99; transform: translateY(-2px); }
+        body.dark-theme .btn { background: #70a9ff; color: #0f1724; }
+        .extras-group { margin: 20px 0; max-height: 320px; overflow-y: auto; padding-right: 8px; }
+        .extras-group label { display: flex; align-items: center; gap: 14px; margin: 16px 0; cursor: pointer; }
+        .extras-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: #0066CC; }
+        .profile-section { background: #f8fafc; border-radius: 28px; padding: 24px; }
+        body.dark-theme .profile-section { background: #253240; }
+        .booking-item { background: #ffffff; border-radius: 24px; padding: 18px; margin-bottom: 16px; border: 1px solid #eef2f8; }
+        body.dark-theme .booking-item { background: #253240; border-color: #31475b; }
+        .extras-list { font-size: 13px; margin-top: 10px; color: #2b6e3c; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 12px 28px; border-radius: 60px; font-weight: 600; cursor: pointer; }
+        .chat-widget { position: fixed; bottom: 28px; right: 28px; width: 340px; background: white; border-radius: 32px; box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2); overflow: hidden; display: none; flex-direction: column; z-index: 1000; }
+        .chat-widget.open { display: flex; }
+        .chat-header { background: #0066CC; color: white; padding: 16px 20px; display: flex; justify-content: space-between; font-weight: 700; }
+        .chat-messages { height: 280px; overflow-y: auto; padding: 16px; background: #f9fbfe; }
+        .chat-message.user { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+        .chat-message.bot { display: flex; justify-content: flex-start; margin-bottom: 12px; }
+        .chat-bubble { max-width: 80%; padding: 10px 16px; border-radius: 24px; background: white; }
+        .chat-message.user .chat-bubble { background: #0066CC; color: white; }
+        .chat-input-area { display: flex; padding: 12px; border-top: 1px solid #e2edf7; gap: 8px; }
+        .chat-input-area input { flex: 1; padding: 10px 16px; border-radius: 60px; border: 1px solid #cbdde9; outline: none; }
+        .notification { position: fixed; bottom: 28px; left: 28px; background: #0066CC; color: white; padding: 14px 24px; border-radius: 60px; font-weight: 600; animation: slideUp 0.3s; z-index: 2000; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .avatar-preview { width: 100px; height: 100px; border-radius: 50%; background: #0066CC; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: bold; color: white; margin-bottom: 20px; }
+        .settings-item { margin: 24px 0; display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .tab-btn.active { background: #0066CC; color: white; border: none; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header>
+        <div class="logo" onclick="location.reload()">✈ TravelEase</div>
+        <div class="user-area" id="userArea">
+            <button id="authButton" onclick="openAuthModal()" data-i18n="auth_btn">Вход / Регистрация</button>
+        </div>
+        <div class="nav">
+            <button id="navHome" class="active" onclick="showView('home')" data-i18n="nav_home">Поиск туров</button>
+            <button onclick="openChat()" data-i18n="nav_chat">Чат-бот 🤖</button>
+        </div>
+    </header>
+    <div class="content">
+        <div id="homeView" class="list-view">
+            <div class="search-section">
+                <div class="search-group"><label data-i18n="search_dest">Куда едем?</label><input type="text" id="searchDestination" placeholder="Страна или отель" data-i18n-placeholder="search_placeholder"></div>
+                <div class="search-group"><label data-i18n="date_from">Заезд</label><input type="date" id="dateFrom"></div>
+                <div class="search-group"><label data-i18n="date_to">Выезд</label><input type="date" id="dateTo"></div>
+                <div class="search-group"><label data-i18n="travelers">Туристов</label><input type="number" id="travelers" value="2" min="1"></div>
+                <div class="search-group"><button class="btn" style="padding:12px 30px;" onclick="searchTours()" data-i18n="search_btn">Найти тур</button></div>
+                <div id="avatarContainer" style="display:none;" onclick="goToProfile()" class="avatar-search-wrapper"><div id="avatarPlaceholder" class="avatar"></div></div>
+            </div>
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-btn active" data-cat="all" data-i18n="cat_all">🌍 Все туры</button>
+                <button class="category-btn" data-cat="family" data-i18n="cat_family">👨‍👩‍👧‍👦 Семейные</button>
+                <button class="category-btn" data-cat="excursion" data-i18n="cat_excursion">🏛 Экскурсионные</button>
+                <button class="category-btn" data-cat="sport" data-i18n="cat_sport">⚡ Спортивные</button>
+            </div>
+            <div class="filter-row">
+                <div class="filter-item"><label data-i18n="price_up_to">Цена до:</label><input type="range" id="priceFilter" min="0" max="600000" step="5000" value="600000" oninput="updatePriceLabel()"><span id="priceValue">600 000 ₽</span></div>
+                <div class="filter-item"><label data-i18n="rating_from">Рейтинг от:</label><select id="ratingFilter"><option value="0" data-i18n="any">Любой</option><option value="4">4+</option><option value="4.5">4.5+</option><option value="4.8">4.8+</option></select></div>
+                <div class="filter-item"><label data-i18n="meal">Питание:</label><select id="mealFilter"><option value="" data-i18n="any_meal">Любое</option><option value="all-inclusive">All Inclusive</option><option value="breakfast">Завтраки</option><option value="half">Полупансион</option></select></div>
+            </div>
+            <div id="toursContainer" class="tours-grid"></div>
+        </div>
+        <div id="profileView" class="detail-view" style="display:none;">
+            <h2 style="margin-bottom:20px;" data-i18n="profile_title">👤 Личный кабинет</h2>
+            <div class="profile-tabs" style="display:flex; gap:12px; margin-bottom:24px; border-bottom:2px solid #e2edf7; padding-bottom:8px;">
+                <button class="tab-btn active" onclick="switchProfileTab('profileInfo')" data-i18n="profile_tab">Профиль</button>
+                <button class="tab-btn" onclick="switchProfileTab('bookings')" data-i18n="bookings_tab">История бронирований</button>
+                <button class="tab-btn" onclick="switchProfileTab('settings')" data-i18n="settings_tab">Настройки</button>
+            </div>
+            <div id="profileInfoTab" class="tab-content active"><div class="profile-section"><div id="profileAvatarPreview" class="avatar-preview"></div><p><strong data-i18n="name_label">Имя:</strong> <span id="profileName"></span></p><p><strong data-i18n="email_label">Email:</strong> <span id="profileEmail"></span></p></div></div>
+            <div id="bookingsTab" class="tab-content"><div class="profile-section"><div id="bookingHistory"></div><button class="btn" style="margin-top:20px;" onclick="clearBookings()" data-i18n="clear_history">Очистить историю</button></div></div>
+            <div id="settingsTab" class="tab-content"><div class="profile-section"><div class="settings-item"><label data-i18n="theme_label">Тема:</label><select id="themeSelect" onchange="changeTheme(this.value)"><option value="light">Светлая</option><option value="dark">Тёмная</option></select></div><div class="settings-item"><label data-i18n="lang_label">Язык:</label><select id="languageSelect" onchange="changeLanguage(this.value)"><option value="ru">Русский</option><option value="en">English</option></select></div><div class="settings-item avatar-upload"><label data-i18n="avatar_label">Аватар:</label><input type="file" id="avatarUpload" accept="image/*"><button class="btn" style="padding:8px 20px;" onclick="uploadAvatar()" data-i18n="upload_btn">Загрузить</button></div><div class="settings-item"><button class="logout-btn" onclick="logout()" data-i18n="logout_btn">Выйти из аккаунта</button></div></div></div>
+        </div>
+    </div>
+</div>
+
+<div id="destinationsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeDestinationsModal()">&times;</span><h2 id="destModalTitle" data-i18n="dest_modal_title">Выберите город / курорт</h2><div id="destinationsList" class="destinations-list"></div></div></div>
+<div id="extrasModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeExtrasModal()">&times;</span><h2 data-i18n="extras_title">✨ Дополнительные услуги</h2><div id="extrasList" class="extras-group"></div><button id="confirmBookingBtn" class="btn" style="width:100%;" onclick="confirmBookingWithExtras()" data-i18n="confirm_btn">Подтвердить бронь</button></div></div>
+<div id="authModal" class="modal"></div>
+<div id="chatWidget" class="chat-widget"></div>
+
+<script>
+    // ------------------- ПЕРЕВОДЫ ИНТЕРФЕЙСА -------------------
+    const i18n = {
+        ru: {
+            auth_btn:"Вход / Регистрация", nav_home:"Поиск туров", nav_chat:"Чат-бот 🤖",
+            search_dest:"Куда едем?", search_placeholder:"Страна или отель", date_from:"Заезд", date_to:"Выезд", travelers:"Туристов", search_btn:"Найти тур",
+            price_up_to:"Цена до:", rating_from:"Рейтинг от:", meal:"Питание:", any:"Любой", any_meal:"Любое",
+            cat_all:"🌍 Все туры", cat_family:"👨‍👩‍👧‍👦 Семейные", cat_excursion:"🏛 Экскурсионные", cat_sport:"⚡ Спортивные",
+            profile_title:"👤 Личный кабинет", profile_tab:"Профиль", bookings_tab:"История бронирований", settings_tab:"Настройки",
+            name_label:"Имя:", email_label:"Email:", clear_history:"Очистить историю", theme_label:"Тема:", lang_label:"Язык:",
+            avatar_label:"Аватар:", upload_btn:"Загрузить", logout_btn:"Выйти из аккаунта",
+            login_title:"Вход", login_btn:"Войти", to_register:"Нет аккаунта? Зарегистрируйтесь", register_btn:"Зарегистрироваться", to_login:"Уже есть аккаунт? Войти",
+            extras_title:"✨ Дополнительные услуги", confirm_btn:"Подтвердить бронь", book_btn:"Забронировать с доп. услугами",
+            dest_modal_title:"Выберите город / курорт", chat_welcome:"Здравствуйте! Нажмите на любой тур, чтобы увидеть 15 направлений и забронировать.",
+            family_badge:"👪 Семейный", excursion_badge:"🏛 Экскурсионный", sport_badge:"⚡ Спортивный"
+        },
+        en: {
+            auth_btn:"Login / Register", nav_home:"Search tours", nav_chat:"Chat bot 🤖",
+            search_dest:"Where to go?", search_placeholder:"Country or hotel", date_from:"Check-in", date_to:"Check-out", travelers:"Travelers", search_btn:"Find tour",
+            price_up_to:"Price up to:", rating_from:"Rating from:", meal:"Meal:", any:"Any", any_meal:"Any",
+            cat_all:"🌍 All tours", cat_family:"👨‍👩‍👧‍👦 Family", cat_excursion:"🏛 Excursion", cat_sport:"⚡ Sport",
+            profile_title:"👤 My Account", profile_tab:"Profile", bookings_tab:"Booking history", settings_tab:"Settings",
+            name_label:"Name:", email_label:"Email:", clear_history:"Clear history", theme_label:"Theme:", lang_label:"Language:",
+            avatar_label:"Avatar:", upload_btn:"Upload", logout_btn:"Logout",
+            login_title:"Login", login_btn:"Login", to_register:"No account? Register", register_btn:"Register", to_login:"Already have account? Login",
+            extras_title:"✨ Extra services", confirm_btn:"Confirm booking", book_btn:"Book with extras",
+            dest_modal_title:"Choose city / resort", chat_welcome:"Hello! Click on any tour to see 15 destinations and book.",
+            family_badge:"👪 Family", excursion_badge:"🏛 Excursion", sport_badge:"⚡ Sport"
+        }
+    };
+
+    // ------------------- МАППИНГ СТРАН НА ФОТОГРАФИИ (ВАШИ URL + ДОБАВЛЕНЫ БОЛГАРИЯ И ЧЕРНОГОРИЯ) -------------------
+    const countryImages = {
+        // Русские названия
+        "Турция": "https://fs.tonkosti.ru/sized/c420x200/1y/d8/1yd8jlja1r9cw8wog88swg8w8.jpg",
+        "ОАЭ": "https://avatars.mds.yandex.net/i?id=caaf9a3d404d3c3d1b4f79c4db36d442_l-10703615-images-thumbs&n=13",
+        "Испания": "https://pichold.ru/wp-content/uploads/2018/05/Spain1.jpg",
+        "Греция": "https://avatars.mds.yandex.net/i?id=753945d20bbf22c6a6fbdc21956136d4_l-5276739-images-thumbs&n=13",
+        "Кипр": "https://avatars.mds.yandex.net/i?id=712f76683929795d12dc6cb9701861fe_l-4667938-images-thumbs&n=13",
+        "Египет": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Cairo_Form_Top.JPG/1280px-Cairo_Form_Top.JPG",
+        "Италия": "https://i.pinimg.com/originals/f0/96/74/f09674102a705268036e72155bc8bedb.jpg?nii=t",
+        "Таиланд": "https://prv1.lori-images.net/vid-sverhu-na-gorod-bangkok-stolitsu-tailanda-0041940785-preview.jpg",
+        "Хорватия": "https://media.istockphoto.com/id/1456054172/ru/фото/живописный-город-и-пляжи-примоштена-с-панорамным-видом.jpg?s=612x612&w=0&k=20&c=5eMLczs-QNZ3IiZ3NWUAD_ZSmj2WtSO-fiffzHGi4II=",
+        "Мальдивы": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Mal%C3%A9_Maldives_%281%29.jpg/1280px-Mal%C3%A9_Maldives_%281%29.jpg",
+        "Болгария": "https://zefirtravel.by/upload/iblock/d06/gyoi3owfc1e5he7cleymrq4ubcai6he0.jpg",
+        "Франция": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/1280px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
+        "Черногория": "https://avatars.mds.yandex.net/get-vertis-journal/4212087/169.jpg_1712660937142/orig",
+        "Шри-Ланка": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
+        "Мексика": "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?w=400&h=300&fit=crop",
+        "Великобритания": "https://cdnn21.img.ria.ru/images/155635/45/1556354505_0:438:2000:1563_1920x0_80_0_0_64fb6d242c6240d9e44e5de1a31a7d6f.jpg",
+        "Израиль": "https://media.istockphoto.com/id/506401136/tr/foto%C4%9Fraf/view-of-haifa-from-mount-carmel-israel.jpg?s=170667a&w=0&k=20&c=jRl7v8b5OUZMvqsaiNYcy_qJw44idveOdDEF3quhUKE=",
+        "Чехия": "https://avatars.mds.yandex.net/i?id=47c4bacf1a6c9251844a124065e6716e_l-5623485-images-thumbs&n=13",
+        "Португалия": "https://avatars.mds.yandex.net/i?id=853f57af607aa90fb7f7865453f0c22a_l-4257886-images-thumbs&n=13",
+        "Австрия": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Vienna_Street_%28375876406%29.jpg/1280px-Vienna_Street_%28375876406%29.jpg",
+        "Индия": "https://as2.ftcdn.net/jpg/04/01/31/59/1000_F_401315941_G0X03EqVjcPDh1ev7G2wEQpZgFyKDsdK.jpg",
+        "Япония": "https://i.pinimg.com/originals/78/07/6e/78076e2c7926d61602fe616200fc313e.jpg",
+        "Марокко": "https://f.otzyv.ru/f/14/04/143994/24/01052420325418866840.jpeg",
+        "Швейцария": "https://i.pinimg.com/originals/62/a5/1f/62a51f903d980187d5d91b3efa884c68.jpg",
+        "ЮАР": "https://avatars.mds.yandex.net/i?id=478c4f4e84dbdb4a3ce99b69a5c23538_l-11459613-images-thumbs&n=13",
+        "Норвегия": "https://avatars.mds.yandex.net/i?id=b45d98459e0d44fa5370cbfd703229a9_l-5234483-images-thumbs&n=13",
+        "Коста-Рика": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/San_Jose_2020_by_%40caya_here.jpg/960px-San_Jose_2020_by_%40caya_here.jpg",
+        "Новая Зеландия": "https://media.istockphoto.com/id/2161229024/ru/фото/городской-пейзаж-веллингтона-новая-зеландия.jpg?s=612x612&w=0&k=20&c=vqJBxbzULoNAcci7_MfjV-fAuTaaHC8o_zM-yxdJ0Is=",
+        "Исландия": "https://naked-science.ru/wp-content/uploads/2021/07/10-114.jpg",
+        "Кения": "https://avatars.mds.yandex.net/i?id=1cce8fcec178874a376b730a52b8966f_sr-5172151-images-thumbs&n=13",
+        // Английские названия (для EN)
+        "Turkey": "https://fs.tonkosti.ru/sized/c420x200/1y/d8/1yd8jlja1r9cw8wog88swg8w8.jpg",
+        "UAE": "https://avatars.mds.yandex.net/i?id=caaf9a3d404d3c3d1b4f79c4db36d442_l-10703615-images-thumbs&n=13",
+        "Spain": "https://pichold.ru/wp-content/uploads/2018/05/Spain1.jpg",
+        "Greece": "https://avatars.mds.yandex.net/i?id=753945d20bbf22c6a6fbdc21956136d4_l-5276739-images-thumbs&n=13",
+        "Cyprus": "https://avatars.mds.yandex.net/i?id=712f76683929795d12dc6cb9701861fe_l-4667938-images-thumbs&n=13",
+        "Egypt": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Cairo_Form_Top.JPG/1280px-Cairo_Form_Top.JPG",
+        "Italy": "https://i.pinimg.com/originals/f0/96/74/f09674102a705268036e72155bc8bedb.jpg?nii=t",
+        "Thailand": "https://prv1.lori-images.net/vid-sverhu-na-gorod-bangkok-stolitsu-tailanda-0041940785-preview.jpg",
+        "Croatia": "https://media.istockphoto.com/id/1456054172/ru/фото/живописный-город-и-пляжи-примоштена-с-панорамным-видом.jpg?s=612x612&w=0&k=20&c=5eMLczs-QNZ3IiZ3NWUAD_ZSmj2WtSO-fiffzHGi4II=",
+        "Maldives": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Mal%C3%A9_Maldives_%281%29.jpg/1280px-Mal%C3%A9_Maldives_%281%29.jpg",
+        "Bulgaria": "https://zefirtravel.by/upload/iblock/d06/gyoi3owfc1e5he7cleymrq4ubcai6he0.jpg",
+        "France": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/1280px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
+        "Montenegro": "https://avatars.mds.yandex.net/get-vertis-journal/4212087/169.jpg_1712660937142/orig",
+        "Sri Lanka": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
+        "Mexico": "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?w=400&h=300&fit=crop",
+        "UK": "https://cdnn21.img.ria.ru/images/155635/45/1556354505_0:438:2000:1563_1920x0_80_0_0_64fb6d242c6240d9e44e5de1a31a7d6f.jpg",
+        "Israel": "https://media.istockphoto.com/id/506401136/tr/foto%C4%9Fraf/view-of-haifa-from-mount-carmel-israel.jpg?s=170667a&w=0&k=20&c=jRl7v8b5OUZMvqsaiNYcy_qJw44idveOdDEF3quhUKE=",
+        "Czech": "https://avatars.mds.yandex.net/i?id=47c4bacf1a6c9251844a124065e6716e_l-5623485-images-thumbs&n=13",
+        "Portugal": "https://avatars.mds.yandex.net/i?id=853f57af607aa90fb7f7865453f0c22a_l-4257886-images-thumbs&n=13",
+        "Austria": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Vienna_Street_%28375876406%29.jpg/1280px-Vienna_Street_%28375876406%29.jpg",
+        "India": "https://as2.ftcdn.net/jpg/04/01/31/59/1000_F_401315941_G0X03EqVjcPDh1ev7G2wEQpZgFyKDsdK.jpg",
+        "Japan": "https://i.pinimg.com/originals/78/07/6e/78076e2c7926d61602fe616200fc313e.jpg",
+        "Morocco": "https://f.otzyv.ru/f/14/04/143994/24/01052420325418866840.jpeg",
+        "Switzerland": "https://i.pinimg.com/originals/62/a5/1f/62a51f903d980187d5d91b3efa884c68.jpg",
+        "South Africa": "https://avatars.mds.yandex.net/i?id=478c4f4e84dbdb4a3ce99b69a5c23538_l-11459613-images-thumbs&n=13",
+        "Norway": "https://avatars.mds.yandex.net/i?id=b45d98459e0d44fa5370cbfd703229a9_l-5234483-images-thumbs&n=13",
+        "Costa Rica": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/San_Jose_2020_by_%40caya_here.jpg/960px-San_Jose_2020_by_%40caya_here.jpg",
+        "New Zealand": "https://media.istockphoto.com/id/2161229024/ru/фото/городской-пейзаж-веллингтона-новая-зеландия.jpg?s=612x612&w=0&k=20&c=vqJBxbzULoNAcci7_MfjV-fAuTaaHC8o_zM-yxdJ0Is=",
+        "Iceland": "https://naked-science.ru/wp-content/uploads/2021/07/10-114.jpg",
+        "Kenya": "https://avatars.mds.yandex.net/i?id=1cce8fcec178874a376b730a52b8966f_sr-5172151-images-thumbs&n=13"
+    };
+    const defaultImage = "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop";
+
+    // ------------------- 45 ТУРОВ (15 в каждой категории) РУС/АНГЛ -------------------
+    const generateToursData = (lang) => {
+        const isRu = lang === 'ru';
+        const familyTours = [
+            { id: 1, destination: isRu?"Турция":"Turkey", hotelName: "Rixos Premium Belek", price: 68000, rating: 4.7, meal: "all-inclusive", category: "family", description: isRu?"Аквапарк, мини-клуб, семейный спа, всё включено.":"Aquapark, kids club, family spa, all inclusive.", amenities: isRu?["Аквапарк","Детский клуб","All Inclusive"]:["Aquapark","Kids Club","All Inclusive"] },
+            { id: 2, destination: isRu?"ОАЭ":"UAE", hotelName: "Atlantis The Palm", price: 189000, rating: 4.8, meal: "all-inclusive", category: "family", description: isRu?"Огромный аквариум, аквапарк, детские зоны.":"Huge aquarium, aquapark, kids zones.", amenities: isRu?["Аквапарк","Дельфинарий","Семейные номера"]:["Aquapark","Dolphinarium","Family rooms"] },
+            { id: 3, destination: isRu?"Испания":"Spain", hotelName: "Melia Cala Galdana", price: 95000, rating: 4.5, meal: "half", category: "family", description: isRu?"Песчаный пляж, анимация, детский бассейн.":"Sandy beach, animation, kids pool.", amenities: isRu?["Мини-клуб","Семейный спа","Half Board"]:["Mini club","Family spa","Half Board"] },
+            { id: 4, destination: isRu?"Греция":"Greece", hotelName: "Sani Resort", price: 215000, rating: 4.9, meal: "all-inclusive", category: "family", description: isRu?"Лучший семейный курорт Европы.":"Best family resort in Europe.", amenities: isRu?["Детский сад","Спортшкола","All Inclusive"]:["Kindergarten","Sports school","All Inclusive"] },
+            { id: 5, destination: isRu?"Кипр":"Cyprus", hotelName: "Amathus Beach Hotel", price: 87000, rating: 4.6, meal: "breakfast", category: "family", description: isRu?"Песчаный пляж, игровые комнаты.":"Sandy beach, game rooms.", amenities: isRu?["Детский клуб","Теннис","Завтраки"]:["Kids club","Tennis","Breakfast"] },
+            { id: 6, destination: isRu?"Египет":"Egypt", hotelName: "Pickalbatros Palace", price: 52000, rating: 4.4, meal: "all-inclusive", category: "family", description: isRu?"Большой аквапарк, анимация.":"Large aquapark, animation.", amenities: isRu?["Аквапарк","Мини-диско","All Inclusive"]:["Aquapark","Mini disco","All Inclusive"] },
+            { id: 7, destination: isRu?"Италия":"Italy", hotelName: "Parco dei Principi", price: 121000, rating: 4.5, meal: "half", category: "family", description: isRu?"Семейный отель с садом.":"Family hotel with garden.", amenities: isRu?["Игровая зона","СПА","Полупансион"]:["Play area","SPA","Half Board"] },
+            { id: 8, destination: isRu?"Таиланд":"Thailand", hotelName: "Centara Grand Beach", price: 79000, rating: 4.6, meal: "breakfast", category: "family", description: isRu?"Водные горки, детская академия.":"Water slides, kids academy.", amenities: isRu?["Детский клуб","Аквапарк","Завтраки"]:["Kids club","Aquapark","Breakfast"] },
+            { id: 9, destination: isRu?"Хорватия":"Croatia", hotelName: "Valamar Collection", price: 99000, rating: 4.5, meal: "half", category: "family", description: isRu?"Семейные пакеты, анимация.":"Family packages, animation.", amenities: isRu?["Анимация","Семейный СПА","Half Board"]:["Animation","Family SPA","Half Board"] },
+            { id: 10, destination: isRu?"Мальдивы":"Maldives", hotelName: "Kurumba Maldives", price: 248000, rating: 4.8, meal: "all-inclusive", category: "family", description: isRu?"Семейные виллы, клуб для детей.":"Family villas, kids club.", amenities: isRu?["Детский клуб","Кинотеатр","All Inclusive"]:["Kids club","Cinema","All Inclusive"] },
+            { id: 11, destination: isRu?"Болгария":"Bulgaria", hotelName: "Sol Nessebar Palace", price: 39000, rating: 4.2, meal: "all-inclusive", category: "family", description: isRu?"Бассейны, детские площадки.":"Pools, playgrounds.", amenities: isRu?["Мини-клуб","Аквазона","All Inclusive"]:["Mini club","Aqua zone","All Inclusive"] },
+            { id: 12, destination: isRu?"Франция":"France", hotelName: "Club Med Opio", price: 143000, rating: 4.6, meal: "all-inclusive", category: "family", description: isRu?"Семейный all inclusive.":"Family all inclusive.", amenities: isRu?["Детский клуб","Теннис","СПА"]:["Kids club","Tennis","SPA"] },
+            { id: 13, destination: isRu?"Черногория":"Montenegro", hotelName: "Iberostar Bellevue", price: 69000, rating: 4.4, meal: "half", category: "family", description: isRu?"Семейный отель с анимацией.":"Family hotel with animation.", amenities: isRu?["Анимация","Детский бассейн","Half Board"]:["Animation","Kids pool","Half Board"] },
+            { id: 14, destination: isRu?"Шри-Ланка":"Sri Lanka", hotelName: "Heritance Kandalama", price: 112000, rating: 4.7, meal: "breakfast", category: "family", description: isRu?"Приключения для семьи.":"Adventure for family.", amenities: isRu?["Экотропы","Детский клуб","Завтраки"]:["Eco trails","Kids club","Breakfast"] },
+            { id: 15, destination: isRu?"Мексика":"Mexico", hotelName: "Moon Palace", price: 205000, rating: 4.9, meal: "all-inclusive", category: "family", description: isRu?"Огромный курорт, 9 бассейнов.":"Huge resort, 9 pools.", amenities: isRu?["Аквапарк","Игровая зона","All Inclusive"]:["Aquapark","Play zone","All Inclusive"] }
+        ];
+        const excursionTours = [
+            { id: 16, destination: isRu?"Италия":"Italy", hotelName: "NH Collection Roma", price: 142000, rating: 4.7, meal: "breakfast", category: "excursion", description: isRu?"Экскурсии в Колизей, Ватикан.":"Excursions to Colosseum, Vatican.", amenities: isRu?["Экскурсии","Центр города","Завтраки"]:["Excursions","City center","Breakfast"] },
+            { id: 17, destination: isRu?"Греция":"Greece", hotelName: "Electra Metropolis", price: 118000, rating: 4.8, meal: "breakfast", category: "excursion", description: isRu?"Акрополь, древняя агора.":"Acropolis, ancient agora.", amenities: isRu?["Гид","Вид на Акрополь"]:["Guide","Acropolis view"] },
+            { id: 18, destination: isRu?"Египет":"Egypt", hotelName: "Steigenberger Pyramids", price: 72000, rating: 4.5, meal: "half", category: "excursion", description: isRu?"Пирамиды Гизы, Луксор.":"Pyramids of Giza, Luxor.", amenities: isRu?["Экскурсии","Вид на пирамиды"]:["Excursions","Pyramid view"] },
+            { id: 19, destination: isRu?"Франция":"France", hotelName: "Hotel Napoleon Paris", price: 212000, rating: 4.6, meal: "breakfast", category: "excursion", description: isRu?"Триумфальная арка, Лувр.":"Arc de Triomphe, Louvre.", amenities: isRu?["Центр Парижа","Гид"]:["Paris center","Guide"] },
+            { id: 20, destination: isRu?"Турция":"Turkey", hotelName: "DoubleTree Old City", price: 62000, rating: 4.4, meal: "breakfast", category: "excursion", description: isRu?"Айя-София, Голубая мечеть.":"Hagia Sophia, Blue Mosque.", amenities: isRu?["Исторический центр","Экскурсии"]:["Historical center","Excursions"] },
+            { id: 21, destination: isRu?"Великобритания":"UK", hotelName: "The Tower Hotel", price: 198000, rating: 4.7, meal: "breakfast", category: "excursion", description: isRu?"Тауэр, Биг-Бен.":"Tower of London, Big Ben.", amenities: isRu?["Экскурсии","Вид на Тауэр"]:["Excursions","Tower view"] },
+            { id: 22, destination: isRu?"Израиль":"Israel", hotelName: "Mamilla Hotel", price: 175000, rating: 4.8, meal: "half", category: "excursion", description: isRu?"Старый город, Вифлеем.":"Old City, Bethlehem.", amenities: isRu?["Духовные туры","Экскурсии"]:["Spiritual tours","Excursions"] },
+            { id: 23, destination: isRu?"Испания":"Spain", hotelName: "Gran Hotel Barcelona", price: 135000, rating: 4.6, meal: "breakfast", category: "excursion", description: isRu?"Саграда Фамилия, парк Гуэль.":"Sagrada Familia, Park Güell.", amenities: isRu?["Архитектурные туры"]:["Architecture tours"] },
+            { id: 24, destination: isRu?"Чехия":"Czech", hotelName: "Iron Gate Hotel", price: 86000, rating: 4.5, meal: "breakfast", category: "excursion", description: isRu?"Пражский град, Карлов мост.":"Prague Castle, Charles Bridge.", amenities: isRu?["Пешие экскурсии"]:["Walking tours"] },
+            { id: 25, destination: isRu?"Португалия":"Portugal", hotelName: "Tivoli Lisboa", price: 101000, rating: 4.6, meal: "breakfast", category: "excursion", description: isRu?"Башня Белем, Лиссабон.":"Belém Tower, Lisbon.", amenities: isRu?["Экскурсии","Вино"]:["Excursions","Wine"] },
+            { id: 26, destination: isRu?"Хорватия":"Croatia", hotelName: "Hotel Dubrovnik Palace", price: 129000, rating: 4.7, meal: "half", category: "excursion", description: isRu?"Старый город, острова.":"Old town, islands.", amenities: isRu?["Морские экскурсии"]:["Sea excursions"] },
+            { id: 27, destination: isRu?"Австрия":"Austria", hotelName: "Hilton Vienna", price: 110000, rating: 4.5, meal: "breakfast", category: "excursion", description: isRu?"Шёнбрунн, собор.":"Schönbrunn, cathedral.", amenities: isRu?["Экскурсии","Концерты"]:["Excursions","Concerts"] },
+            { id: 28, destination: isRu?"Индия":"India", hotelName: "ITC Mughal Agra", price: 95000, rating: 4.7, meal: "all-inclusive", category: "excursion", description: isRu?"Тадж-Махал.":"Taj Mahal.", amenities: isRu?["Культурные туры"]:["Cultural tours"] },
+            { id: 29, destination: isRu?"Япония":"Japan", hotelName: "Hilton Tokyo", price: 265000, rating: 4.9, meal: "breakfast", category: "excursion", description: isRu?"Храмы, Киото.":"Temples, Kyoto.", amenities: isRu?["Гид-переводчик"]:["Guide interpreter"] },
+            { id: 30, destination: isRu?"Марокко":"Morocco", hotelName: "Sofitel Marrakech", price: 88000, rating: 4.5, meal: "half", category: "excursion", description: isRu?"Марракеш, пустыня.":"Marrakech, desert.", amenities: isRu?["Сафари на джипах"]:["Jeep safari"] }
+        ];
+        const sportTours = [
+            { id: 31, destination: isRu?"Швейцария":"Switzerland", hotelName: "Alpenroyal", price: 178000, rating: 4.8, meal: "half", category: "sport", description: isRu?"Горные лыжи, трекинг.":"Skiing, trekking.", amenities: isRu?["Лыжный склон","СПА"]:["Ski slope","SPA"] },
+            { id: 32, destination: isRu?"Испания":"Spain", hotelName: "Sea Club Costa", price: 97000, rating: 4.6, meal: "breakfast", category: "sport", description: isRu?"Сёрфинг, велосипеды.":"Surfing, bicycles.", amenities: isRu?["Школа сёрфинга"]:["Surf school"] },
+            { id: 33, destination: isRu?"Франция":"France", hotelName: "Club Med Tignes", price: 212000, rating: 4.9, meal: "all-inclusive", category: "sport", description: isRu?"Горные лыжи, спа.":"Skiing, spa.", amenities: isRu?["Лыжи","Сноуборд"]:["Ski","Snowboard"] },
+            { id: 34, destination: isRu?"Таиланд":"Thailand", hotelName: "Thanyapura Resort", price: 112000, rating: 4.7, meal: "breakfast", category: "sport", description: isRu?"Триатлон, йога.":"Triathlon, yoga.", amenities: isRu?["Олимпийский бассейн"]:["Olympic pool"] },
+            { id: 35, destination: isRu?"Италия":"Italy", hotelName: "Lefay Resort", price: 195000, rating: 4.8, meal: "half", category: "sport", description: isRu?"Трейлраннинг, горный байк.":"Trail running, mountain bike.", amenities: isRu?["Спортзал","СПА"]:["Gym","SPA"] },
+            { id: 36, destination: isRu?"Мальдивы":"Maldives", hotelName: "Adaaran Prestige", price: 268000, rating: 4.8, meal: "all-inclusive", category: "sport", description: isRu?"Дайвинг, виндсёрфинг.":"Diving, windsurfing.", amenities: isRu?["Дайвинг-центр"]:["Diving center"] },
+            { id: 37, destination: isRu?"Греция":"Greece", hotelName: "Eria Resort", price: 89000, rating: 4.5, meal: "half", category: "sport", description: isRu?"Водные лыжи, футбол.":"Water skiing, football.", amenities: isRu?["Спортплощадки"]:["Sports grounds"] },
+            { id: 38, destination: isRu?"Австрия":"Austria", hotelName: "Sportalmtal Resort", price: 157000, rating: 4.7, meal: "breakfast", category: "sport", description: isRu?"Парапланеризм, хайкинг.":"Paragliding, hiking.", amenities: isRu?["Горный гид"]:["Mountain guide"] },
+            { id: 39, destination: isRu?"Хорватия":"Croatia", hotelName: "Marina Resort", price: 99000, rating: 4.6, meal: "half", category: "sport", description: isRu?"Парусный спорт, дайвинг.":"Sailing, diving.", amenities: isRu?["Яхт-школа"]:["Yacht school"] },
+            { id: 40, destination: isRu?"ЮАР":"South Africa", hotelName: "Protea Hotel", price: 134000, rating: 4.7, meal: "breakfast", category: "sport", description: isRu?"Сафари на велосипедах.":"Bicycle safari.", amenities: isRu?["Сафари","Велотуры"]:["Safari","Bike tours"] },
+            { id: 41, destination: isRu?"Норвегия":"Norway", hotelName: "Skistar Lodge", price: 188000, rating: 4.8, meal: "half", category: "sport", description: isRu?"Лыжные трассы, фьорды.":"Ski slopes, fjords.", amenities: isRu?["Лыжи","Сноуборд"]:["Ski","Snowboard"] },
+            { id: 42, destination: isRu?"Коста-Рика":"Costa Rica", hotelName: "Costa Rica Surf Camp", price: 145000, rating: 4.9, meal: "all-inclusive", category: "sport", description: isRu?"Сёрфинг, рафтинг.":"Surfing, rafting.", amenities: isRu?["Сёрфинг инструктор"]:["Surf instructor"] },
+            { id: 43, destination: isRu?"Новая Зеландия":"New Zealand", hotelName: "Queenstown Adventure", price: 295000, rating: 4.9, meal: "breakfast", category: "sport", description: isRu?"Банджи-джампинг, каякинг.":"Bungee jumping, kayaking.", amenities: isRu?["Экстрим-парк"]:["Extreme park"] },
+            { id: 44, destination: isRu?"Исландия":"Iceland", hotelName: "Icelandair Hotel", price: 206000, rating: 4.8, meal: "half", category: "sport", description: isRu?"Трекинг к вулканам.":"Volcano trekking.", amenities: isRu?["Ледниковые туры"]:["Glacier tours"] },
+            { id: 45, destination: isRu?"Кения":"Kenya", hotelName: "Loisaba Tented Camp", price: 256000, rating: 4.9, meal: "all-inclusive", category: "sport", description: isRu?"Сафари на бегу, марафоны.":"Running safari, marathons.", amenities: isRu?["Сафари-туры"]:["Safari tours"] }
+        ];
+        const all = [...familyTours, ...excursionTours, ...sportTours];
+        all.forEach(t => {
+            t.image = countryImages[t.destination] || defaultImage;
+        });
+        return all;
+    };
+
+    let currentLang = localStorage.getItem('travelEaseLang') || 'ru';
+    let toursData = generateToursData(currentLang);
+    let currentCategory = "all";
+    let currentTour = null;
+    let selectedDestination = null;
+    let currentUser = null;
+    let users = JSON.parse(localStorage.getItem('travelEaseUsers')) || [];
+
+    // Направления (15 для каждого тура) - динамическая генерация
+    function getDestinationsForTour(tour) {
+        const country = tour.destination;
+        const variants = [country+" Центр", country+" Пляж", country+" Старый город", country+" Порт", country+" Озеро", country+" Горы", country+" Долина", country+" Заповедник", country+" Курортный", country+" Прибрежный", country+" Исторический", country+" Зелёный", country+" Восточный", country+" Западный", country+" Северный"];
+        if(currentLang === 'en') return variants.map(v => v.replace("Центр","Center").replace("Пляж","Beach").replace("Старый город","Old Town").replace("Порт","Port").replace("Озеро","Lake").replace("Горы","Mountains").replace("Долина","Valley").replace("Заповедник","Reserve").replace("Курортный","Resort").replace("Прибрежный","Coastal").replace("Исторический","Historic").replace("Зелёный","Green").replace("Восточный","Eastern").replace("Западный","Western").replace("Северный","Northern"));
+        return variants;
+    }
+
+    function applyLanguage() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (i18n[currentLang][key]) el.innerText = i18n[currentLang][key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (i18n[currentLang][key]) el.placeholder = i18n[currentLang][key];
+        });
+        document.getElementById('languageSelect').value = currentLang;
+        toursData = generateToursData(currentLang);
+        filterTours();
+        const destModalTitle = document.getElementById('destModalTitle');
+        if (destModalTitle) destModalTitle.innerText = i18n[currentLang].dest_modal_title;
+        const chatWelcome = document.querySelector('#chatMessages .chat-message.bot .chat-bubble');
+        if (chatWelcome) chatWelcome.innerText = i18n[currentLang].chat_welcome;
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('travelEaseLang', lang);
+        applyLanguage();
+        showNotification(currentLang === 'ru' ? 'Язык изменён на русский' : 'Language changed to English');
+    }
+
+    function renderTours(tours) {
+        const container = document.getElementById('toursContainer');
+        if (!tours.length) { container.innerHTML = `<p style="text-align:center; padding:40px;">${currentLang === 'ru' ? 'Туры не найдены' : 'No tours found'}</p>`; return; }
+        container.innerHTML = tours.map(t => {
+            let badgeText = '';
+            if (t.category === 'family') badgeText = i18n[currentLang].family_badge;
+            else if (t.category === 'excursion') badgeText = i18n[currentLang].excursion_badge;
+            else if (t.category === 'sport') badgeText = i18n[currentLang].sport_badge;
+            return `<div class="tour-card" onclick='showDestinations(${JSON.stringify(t).replace(/'/g, "&#39;")})'>
+                <img src="${t.image}" alt="${t.hotelName}" loading="lazy" onerror="this.src='${defaultImage}'">
+                <div class="tour-info">
+                    <h3>${t.hotelName}</h3>
+                    <div class="destination">${t.destination}</div>
+                    <div class="price">${t.price.toLocaleString()} ₽</div>
+                    <div class="rating">★ ${t.rating}</div>
+                    <div class="tour-category-badge">${badgeText}</div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function filterTours() {
+        const query = document.getElementById('searchDestination').value.toLowerCase();
+        const maxPrice = parseInt(document.getElementById('priceFilter').value);
+        const minRating = parseFloat(document.getElementById('ratingFilter').value) || 0;
+        const meal = document.getElementById('mealFilter').value;
+        let filtered = toursData.filter(t => {
+            const matchCat = currentCategory === "all" || t.category === currentCategory;
+            const matchSearch = t.destination.toLowerCase().includes(query) || t.hotelName.toLowerCase().includes(query);
+            return matchCat && matchSearch && t.price <= maxPrice && t.rating >= minRating && (meal === '' || t.meal === meal);
+        });
+        renderTours(filtered);
+    }
+
+    function setCategory(category) { currentCategory = category; document.querySelectorAll('.category-btn').forEach(btn => { if (btn.dataset.cat === category) btn.classList.add('active'); else btn.classList.remove('active'); }); filterTours(); }
+    function searchTours() { filterTours(); }
+    function updatePriceLabel() { const val = document.getElementById('priceFilter').value; document.getElementById('priceValue').innerText = Number(val).toLocaleString() + ' ₽'; filterTours(); }
+    function showView(view) { document.getElementById('homeView').style.display = view === 'home' ? 'block' : 'none'; document.getElementById('profileView').style.display = view === 'profile' ? 'block' : 'none'; if (view === 'profile' && !currentUser) { alert(currentLang === 'ru' ? 'Войдите в личный кабинет' : 'Please login'); openAuthModal(); showView('home'); } if (view === 'home') filterTours(); }
+
+    function showDestinations(tour) {
+        currentTour = tour;
+        const destinations = getDestinationsForTour(tour);
+        document.getElementById("destModalTitle").innerHTML = `${currentLang === 'ru' ? '📍 Выберите направление для тура «' : '📍 Choose destination for tour «'}${tour.hotelName}» (${tour.destination})`;
+        const container = document.getElementById("destinationsList");
+        container.innerHTML = destinations.map(dest => `<div class="dest-card" onclick="selectDestination('${dest.replace(/'/g, "\\'")}')">✈️ ${dest}</div>`).join('');
+        document.getElementById("destinationsModal").classList.add("active");
+    }
+    function selectDestination(dest) { selectedDestination = dest; closeDestinationsModal(); openExtrasModal(); }
+    function openExtrasModal() {
+        if (!currentUser) { alert(currentLang === 'ru' ? 'Войдите, чтобы забронировать' : 'Login to book'); openAuthModal(); return; }
+        if (!currentTour || !selectedDestination) return;
+        const extrasContainer = document.getElementById('extrasList');
+        const possibleExtras = currentLang === 'ru' ? 
+            ["🏛️ Экскурсия к древним руинам (50$)", "🍷 Дегустация местных вин (35$)", "🤿 Дайвинг с инструктором (70$)", "💆‍♀️ СПА-процедуры на двоих (120$)", "🚁 Полёт на вертолёте (200$)", "🚤 Прогулка на яхте (90$)", "📸 Фотосессия (80$)"] :
+            ["🏛️ Ancient ruins excursion ($50)", "🍷 Local wine tasting ($35)", "🤿 Diving with instructor ($70)", "💆‍♀️ Couple spa treatments ($120)", "🚁 Helicopter flight ($200)", "🚤 Yacht cruise ($90)", "📸 Photoshoot ($80)"];
+        extrasContainer.innerHTML = possibleExtras.map(service => `<label><input type="checkbox" value="${service}"> ${service}</label>`).join('');
+        document.getElementById('extrasModal').classList.add('active');
+    }
+    function closeExtrasModal() { document.getElementById('extrasModal').classList.remove('active'); }
+    function closeDestinationsModal() { document.getElementById('destinationsModal').classList.remove('active'); }
+    function confirmBookingWithExtras() {
+        const checkboxes = document.querySelectorAll('#extrasList input:checked');
+        const selectedExtras = Array.from(checkboxes).map(cb => cb.value);
+        closeExtrasModal();
+        const booking = {
+            id: Date.now(),
+            tourId: currentTour.id,
+            hotel: currentTour.hotelName,
+            destinationCountry: currentTour.destination,
+            selectedPlace: selectedDestination,
+            date: new Date().toLocaleDateString(),
+            price: currentTour.price,
+            extras: selectedExtras,
+            totalPrice: currentTour.price + selectedExtras.reduce((sum, ex) => sum + (parseInt(ex.match(/\d+/)?.[0]) || 0), 0)
+        };
+        if (!currentUser.bookings) currentUser.bookings = [];
+        currentUser.bookings.push(booking);
+        const index = users.findIndex(u => u.id === currentUser.id);
+        if (index !== -1) users[index] = currentUser;
+        saveUsers(); saveCurrentUser(); renderBookingHistory();
+        let extrasText = selectedExtras.length ? `\n➕ ${currentLang === 'ru' ? 'Услуги' : 'Services'}: ${selectedExtras.join(', ')}` : '';
+        showNotification(`${currentLang === 'ru' ? '✅ Забронирован' : '✅ Booked'} ${booking.hotel} (${booking.selectedPlace})! ${currentLang === 'ru' ? 'Сумма' : 'Total'}: ${booking.totalPrice} ₽${extrasText}`);
+        setTimeout(() => { showNotification(currentLang === 'ru' ? '✈️ Напоминание: вылет через 24 часа!' : '✈️ Reminder: departure in 24 hours!'); }, 2000);
+        selectedDestination = null;
+    }
+
+    // Пользовательские функции
+    function saveUsers() { localStorage.setItem('travelEaseUsers', JSON.stringify(users)); }
+    function saveCurrentUser() { if(currentUser) localStorage.setItem('travelEaseCurrentUser', JSON.stringify({ id: currentUser.id, name: currentUser.name, email: currentUser.email })); else localStorage.removeItem('travelEaseCurrentUser'); }
+    function loadCurrentUser() { const saved = localStorage.getItem('travelEaseCurrentUser'); if(saved){ let data=JSON.parse(saved); let found=users.find(u=>u.id===data.id); if(found) currentUser=found; } updateUIForUser(); }
+    function updateUIForUser() { const authBtn = document.getElementById('authButton'); if(currentUser){ authBtn.style.display = 'none'; document.getElementById('profileName').textContent = currentUser.name; document.getElementById('profileEmail').textContent = currentUser.email; } else { authBtn.style.display = 'inline-block'; document.getElementById('profileName').textContent = '—'; document.getElementById('profileEmail').textContent = '—'; } updateAvatarDisplay(); renderBookingHistory(); }
+    function updateAvatarDisplay() { const container = document.getElementById('avatarContainer'), avatarPH = document.getElementById('avatarPlaceholder'), profilePrev = document.getElementById('profileAvatarPreview'); if(currentUser){ container.style.display = 'flex'; if(currentUser.avatar){ avatarPH.innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`; profilePrev.innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`; } else { let letter = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : '?'; avatarPH.innerText = letter; avatarPH.innerHTML = letter; avatarPH.style.background = 'linear-gradient(135deg, #0066CC, #4098ff)'; profilePrev.innerText = letter; profilePrev.innerHTML = letter; profilePrev.style.background = 'linear-gradient(135deg, #0066CC, #4098ff)'; } } else { container.style.display = 'none'; profilePrev.innerHTML = ''; } }
+    function renderBookingHistory() { const container = document.getElementById('bookingHistory'); if(!currentUser || !currentUser.bookings?.length) { container.innerHTML = `<p>${currentLang === 'ru' ? 'У вас пока нет бронирований.' : 'No bookings yet.'}</p>`; return; } container.innerHTML = currentUser.bookings.map(b => `<div class="booking-item"><div><strong>${b.hotel}</strong> (${b.selectedPlace || b.destinationCountry})<br><small>${b.date} · ${b.price.toLocaleString()} ₽</small>${b.extras && b.extras.length ? `<div class="extras-list">🎯 ${currentLang === 'ru' ? 'Услуги' : 'Extras'}: ${b.extras.join(', ')}<br>💰 ${currentLang === 'ru' ? 'Итого' : 'Total'}: ${b.totalPrice} ₽</div>` : ''}</div><div><button class="btn" style="padding:6px 16px;" onclick="downloadVoucher('${b.id}')">📄 ${currentLang === 'ru' ? 'Ваучер' : 'Voucher'}</button></div></div>`).join(''); }
+    function downloadVoucher(bookingId) { if(!currentUser) return; const booking = currentUser.bookings.find(b => b.id == bookingId); if(!booking) return; let extrasInfo = booking.extras?.length ? `\n${currentLang === 'ru' ? 'Дополнительные услуги' : 'Extra services'}: ${booking.extras.join(', ')}\n${currentLang === 'ru' ? 'Итоговая стоимость' : 'Total price'}: ${booking.totalPrice} ₽` : ''; const content = `${currentLang === 'ru' ? 'Ваучер на тур в отель' : 'Voucher for hotel'} ${booking.hotel}\n${currentLang === 'ru' ? 'Место' : 'Place'}: ${booking.selectedPlace}\n${currentLang === 'ru' ? 'Дата брони' : 'Booking date'}: ${booking.date}\n${currentLang === 'ru' ? 'Стоимость' : 'Price'}: ${booking.price} ₽${extrasInfo}\n${currentLang === 'ru' ? 'Спасибо за выбор TravelEase!' : 'Thank you for choosing TravelEase!'}`; const blob = new Blob([content], {type: 'text/plain'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `voucher_${booking.id}.txt`; a.click(); URL.revokeObjectURL(url); showNotification(currentLang === 'ru' ? 'Ваучер сохранён' : 'Voucher saved'); }
+    function clearBookings() { if(currentUser) { currentUser.bookings = []; saveUsers(); saveCurrentUser(); renderBookingHistory(); showNotification(currentLang === 'ru' ? 'История очищена' : 'History cleared'); } }
+    function showNotification(text) { const n = document.createElement('div'); n.className = 'notification'; n.innerText = text; document.body.appendChild(n); setTimeout(()=>n.remove(),4000); }
+    function switchProfileTab(tabId) { document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); if(tabId === 'profileInfo') { document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('profileInfoTab').classList.add('active'); } else if(tabId === 'bookings') { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('bookingsTab').classList.add('active'); renderBookingHistory(); } else if(tabId === 'settings') { document.querySelectorAll('.tab-btn')[2].classList.add('active'); document.getElementById('settingsTab').classList.add('active'); } }
+    function goToProfile() { if(currentUser) showView('profile'); else openAuthModal(); }
+    function uploadAvatar() { const file = document.getElementById('avatarUpload').files[0]; if(!file || !currentUser) return; const reader = new FileReader(); reader.onload = e => { currentUser.avatar = e.target.result; const idx = users.findIndex(u=>u.id===currentUser.id); if(idx!==-1) users[idx]=currentUser; saveUsers(); saveCurrentUser(); updateAvatarDisplay(); showNotification(currentLang === 'ru' ? 'Аватар обновлён' : 'Avatar updated'); }; reader.readAsDataURL(file); }
+    function openAuthModal() { document.getElementById('authModal').classList.add('active'); showLoginForm(); }
+    function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+    function showLoginForm() { document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none'; }
+    function showRegisterForm() { document.getElementById('loginForm').style.display='none'; document.getElementById('registerForm').style.display='block'; }
+    function register() { let name=document.getElementById('regName').value.trim(), email=document.getElementById('regEmail').value.trim(), password=document.getElementById('regPassword').value.trim(); if(!name||!email||!password){ alert(currentLang === 'ru' ? 'Заполните поля' : 'Fill all fields'); return; } if(users.find(u=>u.email===email)){ alert(currentLang === 'ru' ? 'Email уже существует' : 'Email already exists'); return; } const newUser = { id: Date.now().toString(), name, email, password, bookings: [], avatar: null }; users.push(newUser); saveUsers(); currentUser=newUser; saveCurrentUser(); updateUIForUser(); closeAuthModal(); showNotification(currentLang === 'ru' ? 'Регистрация успешна!' : 'Registration successful!'); }
+    function login() { let email=document.getElementById('loginEmail').value.trim(), password=document.getElementById('loginPassword').value.trim(); let user=users.find(u=>u.email===email && u.password===password); if(!user){ alert(currentLang === 'ru' ? 'Неверный email или пароль' : 'Invalid email or password'); return; } currentUser=user; saveCurrentUser(); updateUIForUser(); closeAuthModal(); showNotification(currentLang === 'ru' ? 'Добро пожаловать!' : 'Welcome!'); }
+    function logout() { currentUser=null; saveCurrentUser(); updateUIForUser(); showView('home'); showNotification(currentLang === 'ru' ? 'Вы вышли' : 'Logged out'); }
+    function openChat() { document.getElementById('chatWidget').classList.add('open'); }
+    function closeChat() { document.getElementById('chatWidget').classList.remove('open'); }
+    function sendMessage() { const inp = document.getElementById('chatInput'); const msg = inp.value.trim(); if(!msg) return; addChatMessage(msg,'user'); inp.value=''; setTimeout(()=>botReply(msg),500); }
+    function addChatMessage(text,sender) { const container = document.getElementById('chatMessages'); const div = document.createElement('div'); div.className = `chat-message ${sender}`; div.innerHTML = `<div class="chat-bubble">${text}</div>`; container.appendChild(div); container.scrollTop = container.scrollHeight; }
+    function botReply(msg) { let reply = currentLang === 'ru' ? 'Здравствуйте! Выберите тур, затем направление из 15 вариантов и добавьте услуги.' : 'Hello! Choose a tour, then one of 15 destinations and add services.'; if(msg.toLowerCase().includes('скидка') || msg.toLowerCase().includes('discount')) reply = currentLang === 'ru' ? 'Сейчас действует промокод TRAVEL10 на скидку 10%!' : 'Promo code TRAVEL10 gives 10% discount!'; else if(msg.toLowerCase().includes('услуг') || msg.toLowerCase().includes('services')) reply = currentLang === 'ru' ? 'При бронировании доступны экскурсии, дайвинг, спа и вертолётные туры.' : 'Excursions, diving, spa and helicopter tours are available when booking.'; addChatMessage(reply, 'bot'); }
+    function changeTheme(theme) { if(theme==='dark') document.body.classList.add('dark-theme'); else document.body.classList.remove('dark-theme'); localStorage.setItem('travelEaseTheme', theme); document.getElementById('themeSelect').value = theme; }
+    function loadTheme() { changeTheme(localStorage.getItem('travelEaseTheme') || 'light'); }
+
+    window.onload = () => {
+        loadTheme();
+        currentLang = localStorage.getItem('travelEaseLang') || 'ru';
+        applyLanguage();
+        loadCurrentUser();
+        filterTours();
+        document.getElementById('languageSelect').value = currentLang;
+        document.querySelectorAll('.category-btn').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.cat)));
+        document.getElementById('authModal').innerHTML = `<div class="modal-content"><span class="close-modal" onclick="closeAuthModal()">&times;</span><h2 data-i18n="login_title">Вход</h2><div id="loginForm"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="${currentLang === 'ru' ? 'Пароль' : 'Password'}"><button class="btn" style="width:100%;" onclick="login()" data-i18n="login_btn">Войти</button><div style="text-align:center; margin-top:15px; color:#0066CC; cursor:pointer;" onclick="showRegisterForm()" data-i18n="to_register">Нет аккаунта? Зарегистрируйтесь</div></div><div id="registerForm" style="display:none;"><input type="text" id="regName" placeholder="${currentLang === 'ru' ? 'Имя' : 'Name'}"><input type="email" id="regEmail" placeholder="Email"><input type="password" id="regPassword" placeholder="${currentLang === 'ru' ? 'Пароль' : 'Password'}"><button class="btn" style="width:100%;" onclick="register()" data-i18n="register_btn">Зарегистрироваться</button><div style="text-align:center; margin-top:15px; color:#0066CC; cursor:pointer;" onclick="showLoginForm()" data-i18n="to_login">Уже есть аккаунт? Войти</div></div></div>`;
+        document.getElementById('chatWidget').innerHTML = `<div class="chat-header"><span>🤖 TravelBot</span><button onclick="closeChat()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button></div><div id="chatMessages" class="chat-messages"><div class="chat-message bot"><div class="chat-bubble">${i18n[currentLang].chat_welcome}</div></div></div><div class="chat-input-area"><input type="text" id="chatInput" placeholder="${currentLang === 'ru' ? 'Напишите сообщение...' : 'Type a message...'}" onkeypress="if(event.key==='Enter') sendMessage()"><button onclick="sendMessage()">➤</button></div>`;
+    };
+</script>
+</body>
+</html>
