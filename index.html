@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>TravelEase — элитные туры | 45 направлений</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <header>
+        <div class="logo" onclick="location.reload()">✈ TravelEase</div>
+        <div class="user-area" id="userArea">
+            <button id="authButton" onclick="openAuthModal()" data-i18n="auth_btn">Вход / Регистрация</button>
+        </div>
+        <div class="nav">
+            <button id="navHome" class="active" onclick="showView('home')" data-i18n="nav_home">Поиск туров</button>
+            <button onclick="openChat()" data-i18n="nav_chat">Чат-бот 🤖</button>
+        </div>
+    </header>
+    <div class="content">
+        <div id="homeView" class="list-view">
+            <div class="search-section">
+                <div class="search-group"><label data-i18n="search_dest">Куда едем?</label><input type="text" id="searchDestination" placeholder="Страна или отель" data-i18n-placeholder="search_placeholder"></div>
+                <div class="search-group"><label data-i18n="date_from">Заезд</label><input type="date" id="dateFrom"></div>
+                <div class="search-group"><label data-i18n="date_to">Выезд</label><input type="date" id="dateTo"></div>
+                <div class="search-group"><label data-i18n="travelers">Туристов</label><input type="number" id="travelers" value="2" min="1"></div>
+                <div class="search-group"><button class="btn" style="padding:10px 24px;" onclick="searchTours()" data-i18n="search_btn">Найти тур</button></div>
+                <div id="avatarContainer" style="display:none;" onclick="goToProfile()" class="avatar-search-wrapper"><div id="avatarPlaceholder" class="avatar"></div></div>
+            </div>
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-btn active" data-cat="all" data-i18n="cat_all">🌍 Все туры</button>
+                <button class="category-btn" data-cat="family" data-i18n="cat_family">👨‍👩‍👧‍👦 Семейные</button>
+                <button class="category-btn" data-cat="excursion" data-i18n="cat_excursion">🏛 Экскурсионные</button>
+                <button class="category-btn" data-cat="sport" data-i18n="cat_sport">⚡ Спортивные</button>
+            </div>
+            <div class="filter-row">
+                <div class="filter-item"><label data-i18n="price_up_to">Цена до:</label><input type="range" id="priceFilter" min="0" max="600000" step="5000" value="600000" oninput="updatePriceLabel()"><span id="priceValue">600 000 ₽</span></div>
+                <div class="filter-item"><label data-i18n="rating_from">Рейтинг от:</label><select id="ratingFilter"><option value="0" data-i18n="any">Любой</option><option value="4">4+</option><option value="4.5">4.5+</option><option value="4.8">4.8+</option></select></div>
+                <div class="filter-item"><label data-i18n="meal">Питание:</label><select id="mealFilter"><option value="" data-i18n="any_meal">Любое</option><option value="all-inclusive">All Inclusive</option><option value="breakfast">Завтраки</option><option value="half">Полупансион</option></select></div>
+            </div>
+            <div id="toursContainer" class="tours-grid"></div>
+        </div>
+        <div id="profileView" class="detail-view" style="display:none;">
+            <h2 style="margin-bottom:20px;" data-i18n="profile_title">👤 Личный кабинет</h2>
+            <div class="profile-tabs">
+                <button class="tab-btn active" onclick="switchProfileTab('profileInfo')" data-i18n="profile_tab">Профиль</button>
+                <button class="tab-btn" onclick="switchProfileTab('bookings')" data-i18n="bookings_tab">История бронирований</button>
+                <button class="tab-btn" onclick="switchProfileTab('settings')" data-i18n="settings_tab">Настройки</button>
+            </div>
+            <div id="profileInfoTab" class="tab-content active"><div class="profile-section"><div id="profileAvatarPreview" class="avatar-preview"></div><p><strong data-i18n="name_label">Имя:</strong> <span id="profileName"></span></p><p><strong data-i18n="email_label">Email:</strong> <span id="profileEmail"></span></p></div></div>
+            <div id="bookingsTab" class="tab-content"><div class="profile-section"><div id="bookingHistory"></div><button class="btn" style="margin-top:20px;" onclick="clearBookings()" data-i18n="clear_history">Очистить историю</button></div></div>
+            <div id="settingsTab" class="tab-content"><div class="profile-section"><div class="settings-item"><label data-i18n="theme_label">Тема:</label><select id="themeSelect" onchange="changeTheme(this.value)"><option value="light">Светлая</option><option value="dark">Тёмная</option></select></div><div class="settings-item"><label data-i18n="lang_label">Язык:</label><select id="languageSelect" onchange="changeLanguage(this.value)"><option value="ru">Русский</option><option value="en">English</option></select></div><div class="settings-item"><label data-i18n="avatar_label">Аватар:</label><input type="file" id="avatarUpload" accept="image/*"><button class="btn" style="padding:6px 18px;" onclick="uploadAvatar()" data-i18n="upload_btn">Загрузить</button></div><div class="settings-item"><button class="logout-btn" onclick="logout()" data-i18n="logout_btn">Выйти</button></div></div></div>
+        </div>
+    </div>
+</div>
+
+<div id="destinationsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeDestinationsModal()">&times;</span><h2 id="destModalTitle" data-i18n="dest_modal_title">Выберите город / курорт</h2><div id="destinationsList" class="destinations-list"></div></div></div>
+<div id="extrasModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeExtrasModal()">&times;</span><h2 data-i18n="extras_title">✨ Дополнительные услуги</h2><div id="extrasList" class="extras-group"></div><button id="confirmBookingBtn" class="btn" style="width:100%;" onclick="confirmBookingWithExtras()" data-i18n="confirm_btn">Подтвердить бронь</button></div></div>
+<div id="authModal" class="modal"></div>
+<div id="chatWidget" class="chat-widget"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
